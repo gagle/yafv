@@ -1,17 +1,23 @@
-import React from 'react';
+import * as React from 'react';
+import styled from 'styled-components';
+import { Gallery } from './gallery/gallery';
+import { GlobalStyle } from '../theme/styles';
 
-export class App extends React.Component {
-  async componentDidMount() {
-    const response = await fetch(
-      `https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=${
-        process.env.FLICKR_API_KEY
-      }&tags=cats&page=1&per_page=10&format=json&nojsoncallback=1`
-    );
-    const responseJson = await response.json();
-    console.log(responseJson);
-  }
+const AppContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+`;
 
-  render() {
-    return <div>{process.env.FLICKR_API_KEY}</div>;
-  }
-}
+export const App = () => (
+  <React.Fragment>
+    <GlobalStyle />
+    <AppContainer>
+      <Gallery />
+    </AppContainer>
+  </React.Fragment>
+);
