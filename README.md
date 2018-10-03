@@ -21,7 +21,7 @@ process.env.FLICKR_API_SECRET
 
 For each environment there is a dotenv file. These settings are transferredto the React app by the `DefinePlugin` Webpack plugin.
 
-Another alternative is to create a regular JavaScript file exporting an object to allow a more sofisticated configuration and using the `NormalModuleReplacementPlugin` Webpack plugin to replace the file depending on the environment.
+Another alternative is to create a regular JavaScript file exporting an object to allow a more sofisticated configuration and using the `NormalModuleReplacementPlugin` Webpack plugin to replace the file depending on the environment. Then this file can be imported when needed instead of having a global variable like `process.env`.
 
 ```javascript
 export default {
@@ -31,3 +31,5 @@ export default {
   }
 }
 ```
+
+For this sample project the first approach has been used because it seems valid for the React community but the I prefer the second one. Angular CLI implements the second approach and it feels more cleaner and avoids polluting the global namespace.
