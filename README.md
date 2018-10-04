@@ -34,3 +34,9 @@ export default {
 ```
 
 For this sample project the first approach has been used because it seems valid and wide-used by the React community but I prefer the second one. Angular CLI implements the second approach and it feels more cleaner and avoids polluting the global namespace.
+
+## 4. Asynchronicity / Reactive programming
+
+All the asynchronous calls to the Flickr API have been implemented by using RxJs. Once you get used to reactive programming you will never go back to plain promises.
+
+For each image preview, the username of the owner must be shown. This information comes from a second call to the Flickr API from the image id previously fetched. All these calls are executed in parallel and after rendering the images themselves.
