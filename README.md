@@ -8,6 +8,7 @@ ESLint, Babel and Prettier are a bit confusing when integrating and make them wo
 // ESLint valid
 import * as ReactDOM from 'react-dom';
 import * as React from 'react';
+import { takeUntil, map } from 'rxjs/operators';
 ```
 
 ## 3. Specific environment configuration
