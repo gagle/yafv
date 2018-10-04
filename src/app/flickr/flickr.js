@@ -10,7 +10,7 @@ export function getImagesByTag(tag, page, pageSize) {
     )
   ).pipe(
     switchMap(response => response.json()),
-    map(response => response.photos.photo)
+    map(response => response.photos)
   );
 }
 

@@ -40,3 +40,7 @@ For this sample project the first approach has been used because it seems valid 
 All the asynchronous calls to the Flickr API have been implemented by using RxJs. Once you get used to reactive programming you will never go back to plain promises.
 
 For each image preview, the username of the owner must be shown. This information comes from a second call to the Flickr API from the image id previously fetched. All these calls are executed in parallel and after rendering the images themselves.
+
+## 5. Image pages
+
+An infinite scroll with a page size of 10 has been implemented by using the `react-infinite-scroller` package to improve usability.

@@ -2,13 +2,15 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { map } from 'rxjs/operators';
 import { v4 as uuid } from 'uuid';
+import InfiniteScroll from 'react-infinite-scroller';
 import { ImagePreview } from './image-preview';
 import { getImagesByTag, getImagePath } from '../flickr/flickr';
 
-const Container = styled.div`
+const StyledInfiniteScroll = styled(InfiniteScroll)`
   display: flex;
   flex-flow: row wrap;
-  padding: 0 10px;
+  padding: 0 10px 10px 10px;
+  align-content: flex-start;
 `;
 
 export class Gallery extends React.Component {
@@ -16,15 +18,21 @@ export class Gallery extends React.Component {
     super();
 
     this.state = {
-      images: []
+      images: [],
+      pageSize: 10,
+      hasMorePages: true
     };
+
+    this.loadImages = this.loadImages.bind(this);
   }
 
-  componentDidMount() {
-    getImagesByTag('cats', 1, 10)
+  loadImages(page) {
+    const { pageSize } = this.state;
+    getImagesByTag('cats', page, pageSize)
       .pipe(
-        map(images =>
-          images.map(image => (
+        map(response => ({
+          response,
+          nodes: response.photo.map(image => (
             <ImagePreview
               key={uuid()}
               id={image.id}
@@ -32,17 +40,28 @@ export class Gallery extends React.Component {
               title={image.title}
             />
           ))
-        )
+        }))
       )
-      .subscribe(images =>
+      .subscribe(({ response, nodes }) => {
+        const { images: currentImages } = this.state;
         this.setState({
-          images
-        })
-      );
+          images: [...currentImages, nodes],
+          hasMorePages: response.page < response.pages
+        });
+      });
   }
 
   render() {
-    const { images } = this.state;
-    return <Container>{images}</Container>;
+    const { images, hasMorePages } = this.state;
+
+    return (
+      <StyledInfiniteScroll
+        pageStart={1}
+        loadMore={this.loadImages}
+        hasMore={hasMorePages}
+      >
+        {images}
+      </StyledInfiniteScroll>
+    );
   }
 }
