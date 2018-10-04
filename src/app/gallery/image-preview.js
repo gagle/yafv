@@ -54,13 +54,13 @@ export class ImagePreview extends React.Component {
   }
 
   render() {
-    const { src, title } = this.props;
+    const { src, title, onClick } = this.props;
     const { userName } = this.state;
 
     return (
       <ImagePreviewWrapper>
         <ImageWrapper>
-          <Image src={src} />
+          <Image src={src} onClick={onClick} />
         </ImageWrapper>
         <Footer>
           <Caption>{title}</Caption>
@@ -74,5 +74,6 @@ export class ImagePreview extends React.Component {
 ImagePreview.propTypes = {
   src: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired
+  id: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired
 };

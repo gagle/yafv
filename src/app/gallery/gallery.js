@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { map } from 'rxjs/operators';
 import { v4 as uuid } from 'uuid';
 import InfiniteScroll from 'react-infinite-scroller';
+import Modal from 'react-modal';
 import { ImagePreview } from './image-preview';
 import { getImagesByTag, getImagePath } from '../flickr/flickr';
 
@@ -20,10 +21,36 @@ export class Gallery extends React.Component {
     this.state = {
       images: [],
       pageSize: 10,
-      hasMorePages: true
+      hasMorePages: true,
+      isModalOpened: false
     };
 
     this.loadImages = this.loadImages.bind(this);
+    this.openImageModal = this.openImageModal.bind(this);
+    this.closeImageModal = this.closeImageModal.bind(this);
+    this.escFunction = this.escFunction.bind(this);
+  }
+
+  escFunction(event) {
+    if (event.keyCode === 27) {
+      this.closeImageModal();
+    }
+  }
+
+  componentDidMount() {
+    document.addEventListener('keydown', this.escFunction, false);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.escFunction, false);
+  }
+
+  openImageModal() {
+    this.setState({ isModalOpened: true });
+  }
+
+  closeImageModal() {
+    this.setState({ isModalOpened: false });
   }
 
   loadImages(page) {
@@ -35,6 +62,7 @@ export class Gallery extends React.Component {
           nodes: response.photo.map(image => (
             <ImagePreview
               key={uuid()}
+              onClick={this.openImageModal}
               id={image.id}
               src={getImagePath(image)}
               title={image.title}
@@ -52,16 +80,19 @@ export class Gallery extends React.Component {
   }
 
   render() {
-    const { images, hasMorePages } = this.state;
+    const { images, hasMorePages, isModalOpened } = this.state;
 
     return (
-      <StyledInfiniteScroll
-        pageStart={1}
-        loadMore={this.loadImages}
-        hasMore={hasMorePages}
-      >
-        {images}
-      </StyledInfiniteScroll>
+      <React.Fragment>
+        <Modal isOpen={isModalOpened}>test</Modal>
+        <StyledInfiniteScroll
+          pageStart={1}
+          loadMore={this.loadImages}
+          hasMore={hasMorePages}
+        >
+          {images}
+        </StyledInfiniteScroll>
+      </React.Fragment>
     );
   }
 }
