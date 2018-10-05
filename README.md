@@ -58,7 +58,11 @@ An infinite scroll with a page size of 10 images has been implemented by using t
 
 All the layout is responsible with one breakpoint at 600px based on [Material Design](https://material.io/design/layout/responsive-layout-grid.html#breakpoints).
 
-## 6. Miscellaneous
+## 7. Styles
+
+CSS in JS with `styled-components` has been used.
+
+## 8. Miscellaneous
 
 ### 'key' property
 

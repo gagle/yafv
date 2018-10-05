@@ -11,7 +11,8 @@
     "clean": "concurrently \"rimraf dist\" \"rimraf coverage\" \"rimraf npm-debug.log*\" \"npm cache verify\" \"npm prune\"",
     "flow:check": "flow check src",
     "lint": "eslint src",
-    "start:dev": "webpack-dev-server --config config/webpack/webpack.dev.js"
+    "start:dev": "webpack-dev-server --config config/webpack/webpack.dev.js",
+    "test": "jest"
   },
   "dependencies": {
     "date-fns": "2.0.0-alpha.21",
@@ -31,6 +32,7 @@
     "@commitlint/cli": "7.1.2",
     "@commitlint/config-conventional": "7.1.2",
     "babel-eslint": "10.0.1",
+    "babel-jest": "23.6.0",
     "babel-loader": "8.0.4",
     "babel-plugin-styled-components": "1.8.0",
     "concurrently": "4.0.1",
@@ -50,10 +52,12 @@
     "flow-remove-types": "1.2.3",
     "html-webpack-plugin": "3.2.0",
     "husky": "1.1.0",
+    "jest": "23.6.0",
     "lint-staged": "7.3.0",
     "prettier": "1.14.3",
     "pretty-quick": "1.7.0",
     "prop-types": "15.6.2",
+    "react-test-renderer": "16.5.2",
     "rimraf": "2.6.2",
     "stylelint": "9.6.0",
     "stylelint-config-recommended": "2.1.0",
