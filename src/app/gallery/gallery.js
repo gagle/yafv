@@ -5,6 +5,7 @@ import { v4 as uuid } from 'uuid';
 import InfiniteScroll from 'react-infinite-scroller';
 import Modal from 'react-modal';
 import { ImagePreview } from './image-preview';
+import { ImageDialog } from './dialog/image-dialog';
 import { getImagesByTag, getImagePath } from '../flickr/flickr';
 
 const StyledInfiniteScroll = styled(InfiniteScroll)`
@@ -12,6 +13,10 @@ const StyledInfiniteScroll = styled(InfiniteScroll)`
   flex-flow: row wrap;
   padding: 0 10px 10px 10px;
   align-content: flex-start;
+
+  @media screen and (max-width: 600px) {
+    flex-direction: column;
+  }
 `;
 
 export class Gallery extends React.Component {
@@ -22,35 +27,36 @@ export class Gallery extends React.Component {
       images: [],
       pageSize: 10,
       hasMorePages: true,
-      isModalOpened: false
+      isDialogOpened: false,
+      dialogImageId: null
     };
 
     this.loadImages = this.loadImages.bind(this);
-    this.openImageModal = this.openImageModal.bind(this);
-    this.closeImageModal = this.closeImageModal.bind(this);
-    this.escFunction = this.escFunction.bind(this);
+    this.openImageDialog = this.openImageDialog.bind(this);
+    this.closeImageDialog = this.closeImageDialog.bind(this);
+    this.escKeyHandler = this.escKeyHandler.bind(this);
   }
 
-  escFunction(event) {
+  escKeyHandler(event) {
     if (event.keyCode === 27) {
-      this.closeImageModal();
+      this.closeImageDialog();
     }
   }
 
   componentDidMount() {
-    document.addEventListener('keydown', this.escFunction, false);
+    document.addEventListener('keydown', this.escKeyHandler, false);
   }
 
   componentWillUnmount() {
-    document.removeEventListener('keydown', this.escFunction, false);
+    document.removeEventListener('keydown', this.escKeyHandler, false);
   }
 
-  openImageModal() {
-    this.setState({ isModalOpened: true });
+  openImageDialog(imageId) {
+    this.setState({ isDialogOpened: true, dialogImageId: imageId });
   }
 
-  closeImageModal() {
-    this.setState({ isModalOpened: false });
+  closeImageDialog() {
+    this.setState({ isDialogOpened: false });
   }
 
   loadImages(page) {
@@ -62,7 +68,9 @@ export class Gallery extends React.Component {
           nodes: response.photo.map(image => (
             <ImagePreview
               key={uuid()}
-              onClick={this.openImageModal}
+              onClick={() => {
+                this.openImageDialog(image.id);
+              }}
               id={image.id}
               src={getImagePath(image)}
               title={image.title}
@@ -80,11 +88,30 @@ export class Gallery extends React.Component {
   }
 
   render() {
-    const { images, hasMorePages, isModalOpened } = this.state;
+    const { images, hasMorePages, isDialogOpened, dialogImageId } = this.state;
 
     return (
       <React.Fragment>
-        <Modal isOpen={isModalOpened}>test</Modal>
+        <Modal
+          isOpen={isDialogOpened}
+          style={{
+            overlay: {
+              ...Modal.defaultStyles.overlay,
+              display: 'flex',
+              alignItems: 'center'
+            },
+            content: {
+              ...Modal.defaultStyles.content,
+              height: 'fit-content',
+              position: 'initial',
+              margin: 'auto'
+            }
+          }}
+          onRequestClose={this.closeImageDialog}
+          shouldCloseOnOverlayClick
+        >
+          {isDialogOpened && <ImageDialog id={dialogImageId} />}
+        </Modal>
         <StyledInfiniteScroll
           pageStart={1}
           loadMore={this.loadImages}

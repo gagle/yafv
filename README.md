@@ -50,6 +50,16 @@ All the asynchronous calls to the Flickr API have been implemented by using RxJs
 
 For each image preview, the username of the owner must be shown. This information comes from a second call to the Flickr API from the image id previously fetched. All these calls are executed in parallel and after rendering the images themselves.
 
-## 5. Image pages
+## 5. Pagination
 
 An infinite scroll with a page size of 10 images has been implemented by using the `react-infinite-scroller` package to improve usability. The gallery is responsive to any screen size.
+
+## 6. Responsiveness
+
+All the layout is responsible with one breakpoint at 600px based on [Material Design](https://material.io/design/layout/responsive-layout-grid.html#breakpoints).
+
+## 6. Miscellaneous
+
+### 'key' property
+
+Using the index parameter from a `forEach` o `map` is discouraged so a UUID has been used.

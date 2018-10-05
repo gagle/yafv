@@ -7,12 +7,22 @@ const ImagePreviewWrapper = styled.div`
   display: flex;
   flex-direction: column;
   padding: 20px 10px 0;
+
+  @media screen and (max-width: 600px) {
+    align-items: center;
+  }
 `;
 
 const Image = styled.img`
   max-height: 180px;
+
   object-fit: contain;
   cursor: pointer;
+
+  @media screen and (max-width: 600px) {
+    max-height: 300px;
+    max-width: 500px;
+  }
 `;
 
 const ImageWrapper = styled.div`
@@ -24,15 +34,21 @@ const Footer = styled.div`
   display: flex;
   flex-direction: column;
   max-width: 200px;
+
+  @media screen and (max-width: 600px) {
+    align-items: center;
+  }
 `;
 
 const Caption = styled.span`
-  color: rgba(0, 0, 0, 0.87);
   padding-top: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const UserNameCaption = styled(Caption)`
   font-weight: 500;
+  padding-bottom: 4px;
 `;
 
 export class ImagePreview extends React.Component {
@@ -40,7 +56,7 @@ export class ImagePreview extends React.Component {
     super();
 
     this.state = {
-      userName: ''
+      image: null
     };
   }
 
@@ -48,14 +64,20 @@ export class ImagePreview extends React.Component {
     const { id } = this.props;
     getImageDetails(id).subscribe(image => {
       this.setState({
-        userName: image.owner.username
+        image
       });
     });
   }
 
   render() {
     const { src, title, onClick } = this.props;
-    const { userName } = this.state;
+    const { image } = this.state;
+
+    /* eslint-disable no-underscore-dangle */
+
+    const url = image ? image.urls.url[0]._content : null;
+
+    /* eslint-enable no-underscore-dangle */
 
     return (
       <ImagePreviewWrapper>
@@ -64,7 +86,16 @@ export class ImagePreview extends React.Component {
         </ImageWrapper>
         <Footer>
           <Caption>{title}</Caption>
-          {userName && <UserNameCaption>@{userName}</UserNameCaption>}
+          {image && (
+            <React.Fragment>
+              <UserNameCaption>@{image.owner.username}</UserNameCaption>
+              <span>
+                <a href={url} target="_blank">
+                  Flickr
+                </a>
+              </span>
+            </React.Fragment>
+          )}
         </Footer>
       </ImagePreviewWrapper>
     );
